@@ -1,4 +1,4 @@
-package quickwork;
+package quickwork.restService;
 
 import java.io.File;
 import java.io.FileOutputStream;
