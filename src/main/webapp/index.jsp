@@ -6,8 +6,9 @@
 <script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <body>
-<!--  <script type="text/javascript">
-    $(function(){
+<script type="text/javascript">
+  
+/* $(function(){
         $("#input-id").change(function(event) {
             var file = event.target.files[0];
             if(!file.type.match('application/pdf')) {
@@ -25,13 +26,24 @@
             toggleButton(this,'submit-button');
         });
     });
-    
+    $("#submit-button").
     function toggleButton(ref,buttonId){
         document.getElementById(buttonId).disabled= ((ref.value !== ref.defaultValue) ? false : true);
     }
-</script> -->
+   */
+    function setCookie(name, value){
+        document.cookie=name + "=" + value;
+    }
+    //this should set the UserName cookie to the proper value;
+    function storeValues(form){
+        setCookie("X-API-KEY", "apikey123");
+        var a=10;
+        return true;
+    }
+    
+</script> 
     <h1>File Upload Service</h1>
-    <form action="rest/test/upload" id="form-id" method="post" enctype="multipart/form-data">
+    <form action="rest/test/upload" id="form-id" method="post" enctype="multipart/form-data" onsubmit="storeApiKey(this)">
         <p>File : <input id="input-id" type="file" name="file"/></p>
         <input type="submit" value="Upload File" id="submit-button" />
     </form>
