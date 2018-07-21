@@ -6,7 +6,7 @@
 <script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <body>
-<script type="text/javascript">
+<!--  <script type="text/javascript">
     $(function(){
         $("#input-id").change(function(event) {
             var file = event.target.files[0];
@@ -29,11 +29,11 @@
     function toggleButton(ref,buttonId){
         document.getElementById(buttonId).disabled= ((ref.value !== ref.defaultValue) ? false : true);
     }
-</script>
+</script> -->
     <h1>File Upload Service</h1>
     <form action="rest/test/upload" id="form-id" method="post" enctype="multipart/form-data">
         <p>File : <input id="input-id" type="file" name="file"/></p>
-        <input type="submit" value="Upload File" id="submit-button" disabled='disabled'/>
+        <input type="submit" value="Upload File" id="submit-button" />
     </form>
 </body>
 </html>
