@@ -5,19 +5,32 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import org.bson.Document;
+
+import com.mongodb.DBCollection;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
+
+import quickwork.dataService.MongoDbService;
+import quickwork.entity.FileEntity;
 
 @Path("/test")
 public class PdfUploadRest {
 	
 	private static final String FOLDER_PATH = "/home/naman/Projects/";
+	private MongoDbService mongoService = MongoDbService.getInstance();
 	
 	@POST
 	@Path("/upload")
@@ -61,6 +74,7 @@ public class PdfUploadRest {
 			outpuStream.writeTo(fileStream);
 			fileStream.flush();
 			fileStream.close();
+			saveDataToDb(outpuStream,filePath);
 			outpuStream.close();
 		}
 		catch(IOException ex) 
@@ -92,6 +106,23 @@ public class PdfUploadRest {
             	}
             }
 		}
+	}
+
+	private void saveDataToDb(ByteArrayOutputStream fileStream, String filePath) 
+	{
+		FileEntity file= new FileEntity();
+		file.setName(filePath);
+		file.setSize(fileStream.size());
+		file.setCreationDate(new Date());
+		MongoDatabase mongoDb=mongoService.getdb();
+		MongoCollection<Document> files=mongoDb.getCollection("files");
+		files.updateOne(Filters.eq("file",file.getName()), new Document("$set",createDbObject(file)),new UpdateOptions().upsert(true));
+	}
+
+	private Document createDbObject(FileEntity f) 
+	{
+		Document doc= new Document("file",f.getName()).append("creatorDate", f.getCreationDate()).append("size(in Bytes)", f.getSize());
+		return doc;
 	}
 
 }
